@@ -63,6 +63,13 @@ fn run() -> Result<(), Error> {
                 .required(false)
                 .help("Do not add module comments and module attributes in generated file"),
         ).arg(
+            Arg::with_name("CUSTOM_ENUM_DERIVE")
+                .long("custom_enum_derive")
+                .short("E")
+                .required(false)
+                .takes_value(true)
+                .help("The comma separated values to add to #[derive(...)] for every enum"),
+        ).arg(
             Arg::with_name("CUSTOM_STRUCT_DERIVE")
                 .long("custom_struct_derive")
                 .short("C")
@@ -125,6 +132,12 @@ fn run() -> Result<(), Error> {
         .split(',')
         .map(|s| s.to_string())
         .collect();
+    let custom_enum_derive: Vec<String> = matches
+        .value_of("CUSTOM_ENUM_DERIVE")
+        .unwrap_or("")
+        .split(',')
+        .map(|s| s.to_string())
+        .collect();
 
     let compiler = ConfigBuilder::new(
         &in_files,
@@ -138,6 +151,7 @@ fn run() -> Result<(), Error> {
     .headers(!matches.is_present("NO_HEADERS"))
     .dont_use_cow(matches.is_present("DONT_USE_COW"))
     .custom_struct_derive(custom_struct_derive)
+    .custom_enum_derive(custom_enum_derive)
     .nostd(matches.is_present("NOSTD"))
     .hashbrown(matches.is_present("HASHBROWN"))
     .gen_info(matches.is_present("GEN_INFO"))

@@ -56,6 +56,7 @@ pub struct ConfigBuilder {
     error_cycle: bool,
     headers: bool,
     dont_use_cow: bool,
+    custom_enum_derive: Vec<String>,
     custom_struct_derive: Vec<String>,
     custom_repr: Option<String>,
     owned: bool,
@@ -146,6 +147,12 @@ impl ConfigBuilder {
         self
     }
 
+    /// Add custom values to `#[derive(...)]` at the beginning of every enum
+    pub fn custom_enum_derive(mut self, val: Vec<String>) -> Self {
+        self.custom_enum_derive = val;
+        self
+    }
+
     /// Add custom values to `#[derive(...)]` at the beginning of every structure
     pub fn custom_struct_derive(mut self, val: Vec<String>) -> Self {
         self.custom_struct_derive = val;
@@ -226,6 +233,7 @@ impl ConfigBuilder {
                     error_cycle: self.error_cycle,
                     headers: self.headers,
                     dont_use_cow: self.dont_use_cow, //Change this to true to not use cow with ./generate.sh for v2 and v3 tests
+                    custom_enum_derive: self.custom_enum_derive.clone(),
                     custom_struct_derive: self.custom_struct_derive.clone(),
                     custom_repr: self.custom_repr.clone(),
                     custom_rpc_generator: Box::new(|_, _| Ok(())),

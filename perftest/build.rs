@@ -54,6 +54,7 @@ fn main() {
         error_cycle: false,
         headers: false,
         dont_use_cow: false,
+        custom_enum_derive: vec![],
         custom_struct_derive: vec![],
         custom_repr: None,
         custom_rpc_generator: Box::new(|rpc, writer| generate_rpc_test(rpc, writer)),
